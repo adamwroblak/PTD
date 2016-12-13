@@ -16,6 +16,7 @@ QCustomPlot* plotFromVector(QVector<double> y);
 double correctRange(double range);
 QVector<double> liczSinF(double A, double f, double time, double fs, double fi );
 double liczSinOneF(double A, double f, double time, double fs, double fi);
-
+QString decToBin(int dec);
+QString stringToBinaryString(QString str);
 
 #endif // FUNKCJE_H

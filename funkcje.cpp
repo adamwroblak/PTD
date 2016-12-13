@@ -1,6 +1,7 @@
 #include <QVector>
 #include <QFile>
 #include <QTextStream>
+
 #include "qcustomplot.h"
 #include "funkcje.h"
 
@@ -97,6 +98,7 @@ QCustomPlot* plotFromVectors(QVector<double> x, QVector<double> y)
     plot->addGraph();
     plot->graph(0)->setData(x, y);
     plot->setFixedSize(screenWidth, screenHeight);
+    plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
 
     double minXBorder = abs(min(x) * 0.1);
@@ -134,6 +136,10 @@ QCustomPlot* plotFromVector(QVector<double> y)
     plot->addGraph();
     plot->graph(0)->setData(x, y);
     plot->setFixedSize(screenWidth,screenHeight);
+    plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    QCPAxisRect *rect = new QCPAxisRect(plot);
+    rect->setRangeZoomAxes(plot->xAxis, 0);
+
 
     double minXBorder = abs(min(x) * 0.1);
     double maxXBorder = abs(max(x) * 0.1);
@@ -165,4 +171,37 @@ QVector<double> liczSinF(double A, double f, double time, double fs, double fi )
 double liczSinOneF(double A, double f, double time, double fs, double fi)
 {
     return(A * sin(2.0 * M_PI *  f * time / fs + fi));
+}
+
+QString decToBin(int dec)
+{
+   QString result = "";
+   int remainder = 0;
+
+   if (dec <= 0)
+       return result = "0";
+
+   while( dec != 0 )
+   {
+       remainder = dec % 2;
+       result.insert(0, QString::number(remainder));    // wsadź na początek stringa resztę z dzielenia całkowitego
+       dec /= 2;
+   }
+
+   while ( (result.size() % 8) != 0)    // Wypchaj początek stringa zerami jeśli wartość nie jest wielokrotnością 8
+   {
+        result.insert(0, QString::number(0));
+   }
+
+   return result;
+}
+
+QString stringToBinaryString(QString str)
+{
+    QString result = "";
+    for (int i = 0; i < str.size(); i++)
+    {
+        result.append( decToBin(str[i].unicode()) );
+    }
+    return result;
 }
